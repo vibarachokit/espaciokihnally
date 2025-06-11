@@ -405,10 +405,17 @@
         ];
 
         const fullMenuDescription = `
+            Espacio Kihnally es una cafetería acogedora que ofrece:
+
             Bebidas Calientes (con imagen): Espresso (Café concentrado y aromático), Cappuccino (Espresso con leche espumada y un toque de cacao, con imagen de capuchino con croissant), Latte (Espresso con leche vaporizada y una fina capa de espuma), Mocaccino (Latte con sirope de chocolate y crema batida), Té Chai Latte (Mezcla de especias, té negro y leche vaporizada, con imagen de tetera).
+
             Bebidas Frías (con imagen): Iced Latte (Espresso frío con leche y hielo), Frappuccino Clásico (Bebida helada de café con hielo y crema batida), Limonada Natural (Refrescante limonada recién hecha).
+
             Dulces y Postres (con imagen): Croissant de Mantequilla (Perfectamente hojaldrado y dorado), Muffin de Arándanos (Suave y esponjoso, con arándanos frescos), Tarta de Zanahoria (Con glaseado de queso crema), Donas rellenas con crema (Donas suaves rellenas de deliciosa crema).
+
             Opciones Saladas (con imagen): Sándwich de Pavo y Queso (En pan artesanal con vegetales frescos), Quiche Lorraine (Clásico quiche con tocino y queso), Pizza de Salame (Mini pizza con salame, queso y salsa de tomate).
+
+            También contamos con un Barista IA para responder preguntas, un Recomendador Personalizado de Bebidas para encontrar tu bebida ideal y un Cuentacuentos de Café para historias inspiradoras.
         `;
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -531,7 +538,7 @@
 
             chatHistory.push({ role: "user", parts: [{ text: prompt }] });
             const payload = { contents: chatHistory };
-            const apiKey = "";
+            const apiKey = "AIzaSyBYH2DDFYh8tJxof5LHaUuNUbdCSVM-5GU"; // REEMPLAZA ESTO CON TU CLAVE API REAL DE GEMINI
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
             const response = await fetch(apiUrl, {
@@ -560,7 +567,7 @@
 
             chatHistory.push({ role: "user", parts: [{ text: prompt }] });
             const payload = { contents: chatHistory };
-            const apiKey = "";
+            const apiKey = "AIzaSyBYH2DDFYh8tJxof5LHaUuNUbdCSVM-5GU"; // REEMPLAZA ESTO CON TU CLAVE API REAL DE GEMINI
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
             const response = await fetch(apiUrl, {
@@ -595,7 +602,7 @@
 
             chatHistory.push({ role: "user", parts: [{ text: prompt }] });
             const payload = { contents: chatHistory };
-            const apiKey = "";
+            const apiKey = "AIzaSyBYH2DDFYh8tJxof5LHaUuNUbdCSVM-5GU"; // REEMPLAZA ESTO CON TU CLAVE API REAL DE GEMINI
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
             const response = await fetch(apiUrl, {
@@ -620,7 +627,7 @@
 
             chatHistory.push({ role: "user", parts: [{ text: prompt }] });
             const payload = { contents: chatHistory };
-            const apiKey = "";
+            const apiKey = "AIzaSyBYH2DDFYh8tJxof5LHaUuNUbdCSVM-5GU"; // REEMPLAZA ESTO CON TU CLAVE API REAL DE GEMINI
             const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
 
             const response = await fetch(apiUrl, {
