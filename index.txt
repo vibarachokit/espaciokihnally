@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Espacio Kihnally - Menú</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #FDFDFC;
+            color: #6B442A;
+        }
+        .section-title {
+            color: #A97E5B;
+        }
+        .card {
+            background-color: #F5E8DC;
+            border: 1px solid #C6AD90;
+        }
+        .btn-primary {
+            background-color: #A97E5B;
+            color: #FDFDFC;
+            padding: 0.5rem 1rem;
+            border-radius: 0.375rem;
+            font-weight: 600;
+            transition: background-color 0.2s ease-in-out;
+            margin-top: 0.75rem;
+            display: inline-block;
+        }
+        .btn-primary:hover {
+            background-color: #8D6A4C;
+        }
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            visibility: hidden;
+            opacity: 0;
+            transition: visibility 0s, opacity 0.3s ease-in-out;
+        }
+        .modal-overlay.show {
+            visibility: visible;
+            opacity: 1;
+        }
+        .modal-content {
+            background-color: #FDFDFC;
+            color: #6B442A;
+            padding: 2rem;
+            border-radius: 0.75rem;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+            position: relative;
+        }
+        .modal-close-btn {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #6B442A;
+        }
+        .loading-spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #A97E5B;
+            border-radius: 50%;
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+    <!-- Chosen Palette: Warm Coffee Shop (#FDFDFC, #F5E8DC, #6B442A, #8D6A4C, #A97E5B, #C6AD90) -->
+    <!-- Application Structure Plan: The application uses a simple, single-page scrolling structure divided into logical sections: a hero welcome, an about section, distinct categorized menu sections (bebidas calientes, frías, dulces, salados), a Barista AI section for Q&A, a Personalized Drink Recommender, a Coffee Storyteller, and a contact section. This linear flow is intuitive for users browsing a menu and engaging with AI features. -->
+    <!-- Visualization & Content Choices: Hero -> Inform -> Large Text -> Static -> Welcoming message. About Us -> Inform -> Text Block -> Static -> Coffee shop description. Menu Items -> Organize -> HTML Grid/List -> Static -> Clear display of menu items (name, description, price) with added interactive button for LLM pairing and product images. Barista IA -> Inform/Engage -> Text Input + Button + Text Output -> Interactive via Gemini API -> Allows open-ended questions about the cafe/menu. Personalized Drink Recommender -> Inform/Engage -> Dropdowns + Button + Text Output -> Interactive via Gemini API -> Provides customized drink recommendations. Coffee Storyteller -> Engage -> Text Input + Button + Text Output -> Interactive via Gemini API -> Generates short stories based on user input. Contact Info -> Inform -> Text Block -> Static -> Basic contact details. NO Chart.js, Plotly.js, SVG, or Mermaid JS are used as they are not relevant for a simple menu display. Gemini API for pairing suggestions, Q&A, personalized recommendations, and story generation. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+</head>
+<body class="antialiased">
+
+    <header class="bg-[#F5E8DC] py-6">
+        <div class="container mx-auto px-6 flex items-center justify-between">
+            <img src="uploaded:Logo Oficial Kihnally-Inpixio 4096x4096.jpg-7a3658a1-757f-46dc-96a1-5b6ee97d3a30" alt="Logo de Espacio Kihnally" class="h-16 w-auto">
+            <div class="flex-grow text-center">
+                <h1 class="text-4xl md:text-5xl font-bold text-[#6B442A] mb-2">Espacio Kihnally</h1>
+                <p class="text-xl md:text-2xl text-[#8D6A4C]">Donde cada sorbo es una historia</p>
+            </div>
+            <div class="h-16 w-16"></div>
+        </div>
+    </header>
+
+    <main class="container mx-auto p-4 sm:p-6 md:p-8">
+
+        <section id="about" class="mb-16 text-center max-w-4xl mx-auto">
+            <h2 class="text-3xl md:text-4xl font-bold section-title mb-6">Sobre Nosotros</h2>
+            <p class="text-lg text-[#8D6A4C] leading-relaxed">En "Espacio Kihnally", nos apasiona el café y la creación de un espacio donde nuestros clientes puedan relajarse y disfrutar. Seleccionamos cuidadosamente los granos de café más finos y preparamos cada bebida con amor. Además, ofrecemos una variedad de delicias dulces y saladas, horneadas diariamente para complementar tu experiencia.</p>
+        </section>
+
+        <section id="menu" class="mb-16">
+            <h2 class="text-3xl md:text-4xl font-bold section-title text-center mb-10">Nuestro Menú</h2>
+
+            <div id="hot-drinks" class="card rounded-xl shadow-lg p-6 mb-8">
+                <h3 class="text-2xl font-bold text-[#6B442A] mb-6 border-b pb-4 border-[#C6AD90]">Bebidas Calientes</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                    <div class="menu-item-card" data-item-name="Espresso">
+                        <div class="flex items-center mb-2">
+                            <img src="https://placehold.co/80x80/C6AD90/6B442A?text=Espresso" alt="Imagen de Espresso" class="w-20 h-20 rounded-md object-cover mr-4" onerror="this.onerror=null;this.src='https://placehold.co/80x80/C6AD90/6B442A?text=Imagen%20no%20disponible';">
+                            <div>
+                                <h4 class="text-xl font-semibold text-[#8D6A4C]">Espresso</h4>
+                                <p class="text-[#8D6A4C] text-sm italic">Café concentrado y aromático.</p>
+                            </div>
+                        </div>
+                        <p class="text-[#6B442A] font-bold mt-1">$2.50</p>
+                        <button class="btn-primary pairing-btn">Sugerir Maridaje ✨</button>
+                    </div>
+                    <div class="menu-item-card" data-item-name="Cappuccino">
+                        <div class="flex items-center mb-2">
+                            <img src="uploaded:Capuchino Croisant.jpg-89d0b41c-66f7-48b3-b44b-cd4e8ab7e796" alt="Capuchino con Croissant" class="w-20 h-20 rounded-md object-cover mr-4" onerror="this.onerror=null;this.src='https://placehold.co/80x80/C6AD90/6B442A?text=Imagen%20no%20disponible';">
+                            <div>
+                                <h4 class="text-xl font-semibold text-[#8D6A4C]">Cappuccino</h4>
+                                <p class="text-[#8D6A4C] text-sm italic">Espresso con leche espumada y un toque de cacao.</p>
+                            <p class="text-[#6B442A] font-bold mt-1">$3.50</p>
+                            </div>
+                        </div>
+                        <button class="btn-primary pairing-btn">Sugerir Maridaje ✨</button>
+                    </div>
+                    <div class="menu-item-card" data-item-name="Latte">
+                        <div class="flex items-center mb-2">
+                            <img src="https://placehold.co/80x80/C6AD90/6B442A?text=Latte" alt="Imagen de Latte" class="w-20 h-20 rounded-md object-cover mr-4" onerror="this.onerror=null;this.src='https://placehold.co/80x80/C6AD90/6B442A?text=Imagen%20no%20disponible';">
+                            <div>
+                                <h4 class="text-xl font-semibold text-[#8D6A4C]">Latte</h4>
+                                <p class="text-[#8D6A4C] text-sm italic">Espresso con leche vaporizada y una fina capa de espuma.</p>
+                                <p class="text-[#6B442A] font-bold mt-1">$3.75</p>
+                            </div>
+                        </div>
+                        <button class="btn-primary pairing-btn">Sugerir Maridaje ✨</button>
+                    </div>
+                    <div class="menu-item-card" data-item-name="Mocaccino">
+                        <div class="flex items-center mb-2">
+                            <img src="https://placehold.co/80x80/C6AD90/6B442A?text=Mocaccino" alt="Imagen de Mocaccino" class="w-20 h-20 rounded-md object-cover mr-4" onerror="this.onerror=null;this.src='https://placehold.co/80x80/C6AD90/6B442A?text=Imagen%20no%20disponible';">
+                            <div>
+                                <h4 class="text-xl font-semibold text-[#8D6A4C]">Mocaccino</h4>
+                                <p class="text-[#8D6A4C] text-sm italic">Latte con sirope de chocolate y crema batida.</p>
+                                <p class="text-[#6B442A] font-bold mt-1">$4.25</p>
+                            </div>
+                        </div>
+                        <button class="btn-primary pairing-btn">Sugerir Maridaje ✨</button>
+                    </div>
+                    <div class="menu-item-card" data-item-name="Té Chai Latte">
+                        <div class="flex items-center mb-2">
+                            <img src="uploaded:Tetera de Te Naranja.jpg-8a230d0e-d131-495f-b9b1-4efd15371565" alt="Imagen de Té Chai Latte" class="w-20 h-20 rounded-md object-cover mr-4" onerror="this.onerror=null;this.src='https://placehold.co/80x80/C6AD90/6B442A?text=Imagen%20no%20disponible';">
+                            <div>
+                                <h4 class="text-xl font-semibold text-[#8D6A4C]">Té Chai Latte</h4>
+                                <p class="text-[#8D6A4C] text-sm italic">Mezcla de especias, té negro y leche vaporizada.</p>
+                                <p class="text-[#6B442A] font-bold mt-1">$3.90</p>
+                            </div>
+                        </div>
+                        <button class="btn-primary pairing-btn">Sugerir Maridaje ✨</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="cold-drinks" class="card rounded-xl shadow-lg p-6 mb-8">
+                <h3 class="text-2xl font-bold text-[#6B442A] mb-6 border-b pb-4 border-[#C6AD90]">Bebidas Frías</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                    <div class="menu-item-card" data-item-name="Iced Latte">
+                        <div class="flex items-center mb-2">
+                            <img src="https://placehold.co/80x80/C6AD90/6B442A?text=Iced%20Latte" alt="Imagen de Iced Latte" class="w-20 h-20 rounded-md object-cover mr-4" onerror="this.onerror=null;this.src='https://placehold.co/80x80/C6AD90/6B442A?text=Imagen%20no%20disponible';">
+                            <div>
+                                <h4 class="text-xl font-semibold text-[#8D6A4C]">Iced Latte</h4>
+                                <p class="text-[#8D6A4C] text-sm italic">Espresso frío con leche y hielo.</p>
+                                <p class="text-[#6B442A] font-bold mt-1">$3.90</p>
+                            </div>
+                        </div>
+                        <button class="btn-primary pairing-btn">Sugerir Maridaje ✨</button>
+                    </div>
+                    <div class="menu-item-card" data-item-name="Frappuccino Clásico">
+                        <div class="flex items-center mb-2">
+                            <img src="https://placehold.co/80x80/C6AD90/6B442A?text=Frappuccino" alt="Imagen de Frappuccino Clásico" class="w-20 h-20 rounded-md object-cover mr-4" onerror="this.onerror=null;this.src='https://placehold.co/80x80/C6AD90/6B442A?text=Imagen%20no%20disponible';">
+                            <div>
+                                <h4 class="text-xl font-semibold text-[#8D6A4C]">Frappuccino Clásico</h4>
+                                <p class="text-[#8D6A4C] text-sm italic">Bebida helada de café con hielo y crema batida.</p>
+                                <p class="text-[#6B442A] font-bold mt-1">$4.75</p>
+                            </div>
+                        </div>
+                        <button class="btn-primary pairing-btn">Sugerir Maridaje ✨</button>
+                    </div>
+                    <div class="menu-item-card" data-item-name="Limonada Natural">
+                        <div class="flex items-center mb-2">
+                            <img src="https://placehold.co/80x80/C6AD90/6B442A?text=Limonada" alt="Imagen de Limonada Natural" class="w-20 h-20 rounded-md object-cover mr-4" onerror="this.onerror=null;this.src='https://placehold.co/80x80/C6AD90/6B442A?text=Imagen%20no%20disponible';">
+                            <div>
+                                <h4 class="text-xl font-semibold text-[#8D6A4C]">Limonada Natural</h4>
+                                <p class="text-[#8D6A4C] text-sm italic">Refrescante limonada recién hecha.</p>
+                                <p class="text-[#6B442A] font-bold mt-1">$3.00</p>
+                            </div>
+                        </div>
+                        <button class="btn-primary pairing-btn">Sugerir Maridaje ✨</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="pastries" class="card rounded-xl shadow-lg p-6 mb-8">
+                <h3 class="text-2xl font-bold text-[#6B442A] mb-6 border-b pb-4 border-[#C6AD90]">Dulces y Postres</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                    <div class="menu-item-card" data-item-name="Croissant de Mantequilla">
+                        <div class="flex items-center mb-2">
+                            <img src="https://placehold.co/80x80/C6AD90/6B442A?text=Croissant" alt="Imagen de Croissant de Mantequilla" class="w-20 h-20 rounded-md object-cover mr-4" onerror="this.onerror=null;this.src='https://placehold.co/80x80/C6AD90/6B442A?text=Imagen%20no%20disponible';">
+                            <div>
+                                <h4 class="text-xl font-semibold text-[#8D6A4C]">Croissant de Mantequilla</h4>
+                                <p class="text-[#8D6A4C] text-sm italic">Perfectamente hojaldrado y dorado.</p>
+                                <p class="text-[#6B442A] font-bold mt-1">$2.75</p>
+                            </div>
+                        </div>
+                        <button class="btn-primary pairing-btn">Sugerir Maridaje ✨</button>
+                    </div>
+                    <div class="menu-item-card" data-item-name="Muffin de Arándanos">
+                        <div class="flex items-center mb-2">
+                            <img src="https://placehold.co/80x80/C6AD90/6B442A?text=Muffin" alt="Imagen de Muffin de Arándanos" class="w-20 h-20 rounded-md object-cover mr-4" onerror="this.onerror=null;this.src='https://placehold.co/80x80/C6AD90/6B442A?text=Imagen%20no%20disponible';">
+                            <div>
+                                <h4 class="text-xl font-semibold text-[#8D6A4C]">Muffin de Arándanos</h4>
+                                <p class="text-[#8D6A4C] text-sm italic">Suave y esponjoso, con arándanos frescos.</p>
+                                <p class="text-[#6B442A] font-bold mt-1">$3.25</p>
+                            </div>
+                        </div>
+                        <button class="btn-primary pairing-btn">Sugerir Maridaje ✨</button>
+                    </div>
+                    <div class="menu-item-card" data-item-name="Tarta de Zanahoria">
+                        <div class="flex items-center mb-2">
+                            <img src="https://placehold.co/80x80/C6AD90/6B442A?text=Tarta" alt="Imagen de Tarta de Zanahoria" class="w-20 h-20 rounded-md object-cover mr-4" onerror="this.onerror=null;this.src='https://placehold.co/80x80/C6AD90/6B442A?text=Imagen%20no%20disponible';">
+                            <div>
+                                <h4 class="text-xl font-semibold text-[#8D6A4C]">Tarta de Zanahoria</h4>
+                                <p class="text-[#8D6A4C] text-sm italic">Con glaseado de queso crema.</p>
+                                <p class="text-[#6B442A] font-bold mt-1">$4.50</p>
+                            </div>
+                        </div>
+                        <button class="btn-primary pairing-btn">Sugerir Maridaje ✨</button>
+                    </div>
+                    <div class="menu-item-card" data-item-name="Donas rellenas con crema">
+                        <div class="flex items-center mb-2">
+                            <img src="https://placehold.co/80x80/C6AD90/6B442A?text=Donas" alt="Imagen de Donas rellenas con crema" class="w-20 h-20 rounded-md object-cover mr-4" onerror="this.onerror=null;this.src='https://placehold.co/80x80/C6AD90/6B442A?text=Imagen%20no%20disponible';">
+                            <div>
+                                <h4 class="text-xl font-semibold text-[#8D6A4C]">Donas rellenas con crema</h4>
+                                <p class="text-[#8D6A4C] text-sm italic">Donas suaves rellenas de deliciosa crema.</p>
+                                <p class="text-[#6B442A] font-bold mt-1">$1.800</p>
+                            </div>
+                        </div>
+                        <button class="btn-primary pairing-btn">Sugerir Maridaje ✨</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="food" class="card rounded-xl shadow-lg p-6">
+                <h3 class="text-2xl font-bold text-[#6B442A] mb-6 border-b pb-4 border-[#C6AD90]">Opciones Saladas</h3>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                    <div class="menu-item-card" data-item-name="Sándwich de Pavo y Queso">
+                        <div class="flex items-center mb-2">
+                            <img src="https://placehold.co/80x80/C6AD90/6B442A?text=Sandwich" alt="Imagen de Sándwich de Pavo y Queso" class="w-20 h-20 rounded-md object-cover mr-4" onerror="this.onerror=null;this.src='https://placehold.co/80x80/C6AD90/6B442A?text=Imagen%20no%20disponible';">
+                            <div>
+                                <h4 class="text-xl font-semibold text-[#8D6A4C]">Sándwich de Pavo y Queso</h4>
+                                <p class="text-[#8D6A4C] text-sm italic">En pan artesanal con vegetales frescos.</p>
+                                <p class="text-[#6B442A] font-bold mt-1">$6.00</p>
+                            </div>
+                        </div>
+                        <button class="btn-primary pairing-btn">Sugerir Maridaje ✨</button>
+                    </div>
+                    <div class="menu-item-card" data-item-name="Quiche Lorraine">
+                        <div class="flex items-center mb-2">
+                            <img src="https://placehold.co/80x80/C6AD90/6B442A?text=Quiche" alt="Imagen de Quiche Lorraine" class="w-20 h-20 rounded-md object-cover mr-4" onerror="this.onerror=null;this.src='https://placehold.co/80x80/C6AD90/6B442A?text=Imagen%20no%20disponible';">
+                            <div>
+                                <h4 class="text-xl font-semibold text-[#8D6A4C]">Quiche Lorraine</h4>
+                                <p class="text-[#8D6A4C] text-sm italic">Clásico quiche con tocino y queso.</p>
+                                <p class="text-[#6B442A] font-bold mt-1">$5.50</p>
+                            </div>
+                        </div>
+                        <button class="btn-primary pairing-btn">Sugerir Maridaje ✨</button>
+                    </div>
+                    <div class="menu-item-card" data-item-name="Pizza de Salame">
+                        <div class="flex items-center mb-2">
+                            <img src="https://placehold.co/80x80/C6AD90/6B442A?text=Pizza" alt="Imagen de Pizza de Salame" class="w-20 h-20 rounded-md object-cover mr-4" onerror="this.onerror=null;this.src='https://placehold.co/80x80/C6AD90/6B442A?text=Imagen%20no%20disponible';">
+                            <div>
+                                <h4 class="text-xl font-semibold text-[#8D6A4C]">Pizza de Salame</h4>
+                                <p class="text-[#8D6A4C] text-sm italic">Mini pizza con salame, queso y salsa de tomate.</p>
+                                <p class="text-[#6B442A] font-bold mt-1">$7.00</p>
+                            </div>
+                        </div>
+                        <button class="btn-primary pairing-btn">Sugerir Maridaje ✨</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="ai-barista" class="mb-16 text-center max-w-4xl mx-auto">
+            <h2 class="text-3xl md:text-4xl font-bold section-title mb-6">Barista IA ✨</h2>
+            <p class="text-lg text-[#8D6A4C] leading-relaxed mb-6">¿Tienes preguntas sobre nuestro café, el menú o simplemente quieres saber más? ¡Pregúntale a nuestro Barista IA!</p>
+            <div class="card rounded-xl shadow-lg p-6">
+                <textarea id="baristaQuestion" class="w-full p-3 rounded-lg border border-[#C6AD90] bg-[#FDFDFC] text-[#6B442A] placeholder-[#8D6A4C] mb-4" rows="3" placeholder="Ej: ¿Qué café me recomiendas si me gusta dulce?"></textarea>
+                <button id="askBaristaBtn" class="btn-primary w-full">Preguntar al Barista IA ✨</button>
+                <div id="baristaResponse" class="mt-6 p-4 rounded-lg bg-[#FDFDFC] border border-[#C6AD90] text-left text-[#6B442A] min-h-[80px] flex items-center justify-center">
+                    <p class="text-[#8D6A4C]">Tu respuesta aparecerá aquí...</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="drink-recommender" class="mb-16 text-center max-w-4xl mx-auto">
+            <h2 class="text-3xl md:text-4xl font-bold section-title mb-6">Recomendador Personalizado de Bebidas ✨</h2>
+            <p class="text-lg text-[#8D6A4C] leading-relaxed mb-6">Dinos tus preferencias y nuestro Barista IA te sugerirá la bebida perfecta de nuestro menú.</p>
+            <div class="card rounded-xl shadow-lg p-6">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <select id="flavorPref" class="w-full p-3 rounded-lg border border-[#C6AD90] bg-[#FDFDFC] text-[#6B442A]">
+                        <option value="">Sabor Preferido</option>
+                        <option value="dulce">Dulce</option>
+                        <option value="amargo">Amargo</option>
+                        <option value="acido">Ácido</option>
+                        <option value="equilibrado">Equilibrado</option>
+                    </select>
+                    <select id="strengthPref" class="w-full p-3 rounded-lg border border-[#C6AD90] bg-[#FDFDFC] text-[#6B442A]">
+                        <option value="">Intensidad del Café</option>
+                        <option value="ligero">Ligero</option>
+                        <option value="medio">Medio</option>
+                        <option value="intenso">Intenso</option>
+                    </select>
+                    <select id="tempPref" class="w-full p-3 rounded-lg border border-[#C6AD90] bg-[#FDFDFC] text-[#6B442A]">
+                        <option value="">Temperatura</option>
+                        <option value="caliente">Caliente</option>
+                        <option value="fria">Fría</option>
+                    </select>
+                    <input type="text" id="aversionInput" class="w-full p-3 rounded-lg border border-[#C6AD90] bg-[#FDFDFC] text-[#6B442A] placeholder-[#8D6A4C]" placeholder="Ej: sin lácteos, sin nueces">
+                </div>
+                <button id="getRecommendationBtn" class="btn-primary w-full">Obtener Recomendación ✨</button>
+                <div id="recommendationResponse" class="mt-6 p-4 rounded-lg bg-[#FDFDFC] border border-[#C6AD90] text-left text-[#6B442A] min-h-[80px] flex items-center justify-center">
+                    <p class="text-[#8D6A4C]">Tu recomendación aparecerá aquí...</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="coffee-storyteller" class="mb-16 text-center max-w-4xl mx-auto">
+            <h2 class="text-3xl md:text-4xl font-bold section-title mb-6">Cuentacuentos de Café ✨</h2>
+            <p class="text-lg text-[#8D6A4C] leading-relaxed mb-6">¡Inspírate con una historia ambientada en nuestra cafetería! Introduce una palabra clave y deja que la magia suceda.</p>
+            <div class="card rounded-xl shadow-lg p-6">
+                <input type="text" id="storyKeywordInput" class="w-full p-3 rounded-lg border border-[#C6AD90] bg-[#FDFDFC] text-[#6B442A] placeholder-[#8D6A4C] mb-4" placeholder="Ej: misterio, amor, aventura, ciencia ficción...">
+                <button id="generateStoryBtn" class="btn-primary w-full">Generar Historia ✨</button>
+                <div id="storyOutput" class="mt-6 p-4 rounded-lg bg-[#FDFDFC] border border-[#C6AD90] text-left text-[#6B442A] min-h-[120px] flex items-center justify-center overflow-auto">
+                    <p class="text-[#8D6A4C]">Tu historia aparecerá aquí...</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="mb-16 text-center max-w-4xl mx-auto">
+            <h2 class="text-3xl md:text-4xl font-bold section-title mb-6">Encuéntranos</h2>
+            <div class="card rounded-xl shadow-lg p-6">
+                <p class="text-lg text-[#8D6A4C] mb-4">¡Visítanos para una experiencia inolvidable!</p>
+                <p class="text-lg text-[#6B442A] font-semibold">Dirección: Lord Cochrane 049</p>
+                <p class="text-lg text-[#6B442A] font-semibold">Teléfono: 966874954</p>
+                <p class="text-lg text-[#6B442A] font-semibold mb-6">Horario: Jueves a Lunes desde las 17:30 hasta las 22:00 hrs.</p>
+                <div class="bg-[#C6AD90] h-64 w-full rounded-lg flex items-center justify-center text-[#6B442A] text-xl font-semibold">
+                    [Placeholder para Mapa]
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-white mt-12 py-6 border-t border-[#C6AD90]">
+        <div class="container mx-auto text-center text-[#8D6A4C]">
+            <p>&copy; 2025 Espacio Kihnally. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <!-- Modal para sugerencias de maridaje -->
+    <div id="pairingModal" class="modal-overlay">
+        <div class="modal-content">
+            <button class="modal-close-btn" id="closeModalBtn">&times;</button>
+            <h3 class="text-2xl font-bold mb-4 text-[#A97E5B]" id="modalTitle">Sugerencia de Maridaje</h3>
+            <div id="modalBody">
+                <div class="loading-spinner"></div>
+                <p class="mt-4 text-[#8D6A4C]">Cargando sugerencia...</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const menuItems = [
+            "Espresso", "Cappuccino", "Latte", "Mocaccino", "Té Chai Latte",
+            "Iced Latte", "Frappuccino Clásico", "Limonada Natural",
+            "Croissant de Mantequilla", "Muffin de Arándanos", "Tarta de Zanahoria",
+            "Donas rellenas con crema",
+            "Sándwich de Pavo y Queso", "Quiche Lorraine", "Pizza de Salame"
+        ];
+
+        const fullMenuDescription = `
+            Bebidas Calientes (con imagen): Espresso (Café concentrado y aromático), Cappuccino (Espresso con leche espumada y un toque de cacao, con imagen de capuchino con croissant), Latte (Espresso con leche vaporizada y una fina capa de espuma), Mocaccino (Latte con sirope de chocolate y crema batida), Té Chai Latte (Mezcla de especias, té negro y leche vaporizada, con imagen de tetera).
+            Bebidas Frías (con imagen): Iced Latte (Espresso frío con leche y hielo), Frappuccino Clásico (Bebida helada de café con hielo y crema batida), Limonada Natural (Refrescante limonada recién hecha).
+            Dulces y Postres (con imagen): Croissant de Mantequilla (Perfectamente hojaldrado y dorado), Muffin de Arándanos (Suave y esponjoso, con arándanos frescos), Tarta de Zanahoria (Con glaseado de queso crema), Donas rellenas con crema (Donas suaves rellenas de deliciosa crema).
+            Opciones Saladas (con imagen): Sándwich de Pavo y Queso (En pan artesanal con vegetales frescos), Quiche Lorraine (Clásico quiche con tocino y queso), Pizza de Salame (Mini pizza con salame, queso y salsa de tomate).
+        `;
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const pairingButtons = document.querySelectorAll('.pairing-btn');
+            const pairingModal = document.getElementById('pairingModal');
+            const modalTitle = document.getElementById('modalTitle');
+            const modalBody = document.getElementById('modalBody');
+            const closeModalBtn = document.getElementById('closeModalBtn');
+
+            const baristaQuestionInput = document.getElementById('baristaQuestion');
+            const askBaristaBtn = document.getElementById('askBaristaBtn');
+            const baristaResponseDiv = document.getElementById('baristaResponse');
+
+            const flavorPref = document.getElementById('flavorPref');
+            const strengthPref = document.getElementById('strengthPref');
+            const tempPref = document.getElementById('tempPref');
+            const aversionInput = document.getElementById('aversionInput');
+            const getRecommendationBtn = document.getElementById('getRecommendationBtn');
+            const recommendationResponseDiv = document.getElementById('recommendationResponse');
+
+            const storyKeywordInput = document.getElementById('storyKeywordInput');
+            const generateStoryBtn = document.getElementById('generateStoryBtn');
+            const storyOutputDiv = document.getElementById('storyOutput');
+
+
+            pairingButtons.forEach(button => {
+                button.addEventListener('click', async (event) => {
+                    const menuItemCard = event.target.closest('.menu-item-card');
+                    const itemName = menuItemCard.dataset.itemName;
+                    
+                    modalTitle.textContent = `Maridaje para ${itemName}`;
+                    modalBody.innerHTML = '<div class="loading-spinner"></div><p class="mt-4 text-[#8D6A4C]">Cargando sugerencia...</p>';
+                    pairingModal.classList.add('show');
+
+                    try {
+                        const suggestion = await getPairingSuggestion(itemName);
+                        modalBody.innerHTML = `<p class="text-lg text-[#6B442A]">${suggestion}</p>`;
+                    } catch (error) {
+                        modalBody.innerHTML = '<p class="text-lg text-red-600">Error al obtener la sugerencia. Inténtalo de nuevo más tarde.</p>';
+                        console.error('Error fetching pairing suggestion:', error);
+                    }
+                });
+            });
+
+            closeModalBtn.addEventListener('click', () => {
+                pairingModal.classList.remove('show');
+            });
+
+            pairingModal.addEventListener('click', (event) => {
+                if (event.target === pairingModal) {
+                    pairingModal.classList.remove('show');
+                }
+            });
+
+            askBaristaBtn.addEventListener('click', async () => {
+                const question = baristaQuestionInput.value.trim();
+                if (!question) {
+                    baristaResponseDiv.innerHTML = '<p class="text-red-600">Por favor, escribe tu pregunta.</p>';
+                    return;
+                }
+
+                baristaResponseDiv.innerHTML = '<div class="loading-spinner"></div><p class="mt-4 text-[#8D6A4C]">Pensando en la respuesta...</p>';
+
+                try {
+                    const answer = await getBaristaAnswer(question);
+                    baristaResponseDiv.innerHTML = `<p class="text-lg text-[#6B442A]">${answer}</p>`;
+                } catch (error) {
+                    baristaResponseDiv.innerHTML = '<p class="text-lg text-red-600">Lo siento, no pude procesar tu pregunta en este momento. Inténtalo de nuevo más tarde.</p>';
+                    console.error('Error fetching barista answer:', error);
+                }
+            });
+
+            getRecommendationBtn.addEventListener('click', async () => {
+                const flavor = flavorPref.value;
+                const strength = strengthPref.value;
+                const temp = tempPref.value;
+                const aversion = aversionInput.value.trim();
+
+                if (!flavor && !strength && !temp && !aversion) {
+                    recommendationResponseDiv.innerHTML = '<p class="text-red-600">Por favor, selecciona al menos una preferencia.</p>';
+                    return;
+                }
+
+                recommendationResponseDiv.innerHTML = '<div class="loading-spinner"></div><p class="mt-4 text-[#8D6A4C]">Buscando tu bebida ideal...</p>';
+
+                try {
+                    const recommendation = await getDrinkRecommendation(flavor, strength, temp, aversion);
+                    recommendationResponseDiv.innerHTML = `<p class="text-lg text-[#6B442A]">${recommendation}</p>`;
+                } catch (error) {
+                    recommendationResponseDiv.innerHTML = '<p class="text-lg text-red-600">Lo siento, no pude encontrar una recomendación en este momento. Inténtalo de nuevo más tarde.</p>';
+                    console.error('Error fetching drink recommendation:', error);
+                }
+            });
+
+            generateStoryBtn.addEventListener('click', async () => {
+                const keyword = storyKeywordInput.value.trim();
+                if (!keyword) {
+                    storyOutputDiv.innerHTML = '<p class="text-red-600">Por favor, introduce una palabra clave para la historia.</p>';
+                    return;
+                }
+
+                storyOutputDiv.innerHTML = '<div class="loading-spinner"></div><p class="mt-4 text-[#8D6A4C]">Creando tu historia...</p>';
+
+                try {
+                    const story = await generateCoffeeStory(keyword);
+                    storyOutputDiv.innerHTML = `<p class="text-lg text-[#6B442A]">${story}</p>`;
+                } catch (error) {
+                    storyOutputDiv.innerHTML = '<p class="text-lg text-red-600">Lo siento, no pude generar la historia en este momento. Inténtalo de nuevo más tarde.</p>';
+                    console.error('Error generating coffee story:', error);
+                }
+            });
+        });
+
+        async function getPairingSuggestion(itemName) {
+            let chatHistory = [];
+            const prompt = `Dado el siguiente menú de cafetería de Espacio Kihnally, que incluye imágenes de los productos:
+            ${fullMenuDescription}
+            
+            Sugiere un maridaje perfecto para "${itemName}". Proporciona una breve explicación de por qué es un buen maridaje. Sé conciso y amigable. Si no hay un maridaje obvio o el ítem no lo requiere (por ejemplo, es un sándwich que ya es un plato completo), puedes indicar "No aplica" o una nota similar.`;
+
+            chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+            const payload = { contents: chatHistory };
+            const apiKey = "";
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            const result = await response.json();
+            if (result.candidates && result.candidates.length > 0 &&
+                result.candidates[0].content && result.candidates[0].content.parts &&
+                result.candidates[0].content.parts.length > 0) {
+                return result.candidates[0].content.parts[0].text;
+            } else {
+                throw new Error("No se pudo obtener la sugerencia de maridaje.");
+            }
+        }
+
+        async function getBaristaAnswer(question) {
+            let chatHistory = [];
+            const prompt = `Actúa como un barista amigable y experto de la cafetería "Espacio Kihnally". Responde a la siguiente pregunta del cliente basándote en la información que conoces sobre la cafetería y su menú, y sobre el café en general. Sé útil, conciso y en el tono de un barista. El menú incluye imágenes de los productos.
+            Información sobre Espacio Kihnally:
+            ${fullMenuDescription}
+            
+            Pregunta del cliente: "${question}"`;
+
+            chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+            const payload = { contents: chatHistory };
+            const apiKey = "";
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            const result = await response.json();
+            if (result.candidates && result.candidates.length > 0 &&
+                result.candidates[0].content && result.candidates[0].content.parts &&
+                result.candidates[0].content.parts.length > 0) {
+                return result.candidates[0].content.parts[0].text;
+            } else {
+                throw new Error("No se pudo obtener la respuesta del barista.");
+            }
+        }
+
+        async function getDrinkRecommendation(flavor, strength, temp, aversion) {
+            let chatHistory = [];
+            let preferenceText = "Estoy buscando una bebida ";
+            if (flavor) preferenceText += `con un sabor ${flavor} `;
+            if (strength) preferenceText += `de intensidad ${strength} `;
+            if (temp) preferenceText += `que sea ${temp} `;
+            if (aversion) preferenceText += `y que no contenga ${aversion}. `;
+            preferenceText += "Del menú de Espacio Kihnally, ¿cuál me recomiendas y por qué? Sé conciso y amigable, como un barista.";
+
+            const prompt = `Dado el siguiente menú de cafetería de Espacio Kihnally:
+            ${fullMenuDescription}
+            
+            ${preferenceText}`;
+
+            chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+            const payload = { contents: chatHistory };
+            const apiKey = "";
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            const result = await response.json();
+            if (result.candidates && result.candidates.length > 0 &&
+                result.candidates[0].content && result.candidates[0].content.parts &&
+                result.candidates[0].content.parts.length > 0) {
+                return result.candidates[0].content.parts[0].text;
+            } else {
+                throw new Error("No se pudo obtener la recomendación de bebida.");
+            }
+        }
+
+        async function generateCoffeeStory(keyword) {
+            let chatHistory = [];
+            const prompt = `Escribe una historia muy corta, de 2 a 3 párrafos, ambientada en una acogedora cafetería llamada "Espacio Kihnally". La historia debe incorporar la palabra clave: "${keyword}". El tono debe ser cálido y evocador, como la atmósfera de una cafetería.`;
+
+            chatHistory.push({ role: "user", parts: [{ text: prompt }] });
+            const payload = { contents: chatHistory };
+            const apiKey = "";
+            const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+
+            const response = await fetch(apiUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload)
+            });
+
+            const result = await response.json();
+            if (result.candidates && result.candidates.length > 0 &&
+                result.candidates[0].content && result.candidates[0].content.parts &&
+                result.candidates[0].content.parts.length > 0) {
+                return result.candidates[0].content.parts[0].text;
+            } else {
+                throw new Error("No se pudo generar la historia de café.");
+            }
+        }
+    </script>
+</body>
+</html>
